@@ -19,7 +19,7 @@ public class thing {
 
             // Load a custom cursor image
             Toolkit toolkit = Toolkit.getDefaultToolkit();
-            Image cursorImage = toolkit.getImage("src/Grade11/something/cursor.png"); // Replace with your image path
+            Image cursorImage = toolkit.getImage("src/LABRADOR_PROG2/cursor/cursor.png"); // Replace with your image path
 
             // Set the hotspot offsets
             Point hotspot = new Point(30, 30); // Offset x=10, y=10 from top-left of the image

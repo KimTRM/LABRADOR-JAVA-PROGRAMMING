@@ -1,6 +1,7 @@
 package Intermediate_Prog;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Pretest_3019_Labrador_Kim_Louise {

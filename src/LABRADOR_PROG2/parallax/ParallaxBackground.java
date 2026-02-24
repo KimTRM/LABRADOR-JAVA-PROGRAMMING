@@ -17,7 +17,7 @@ public class ParallaxBackground extends JPanel implements ActionListener {
 
     public ParallaxBackground() {
         // Load the background image
-        background = new ImageIcon("src/Grade11/parallax/Bg.jpg").getImage();
+        background = new ImageIcon("src/LABRADOR_PROG2/parallax/Bg.jpg").getImage();
 
         setPreferredSize(new Dimension(width, height));
 
