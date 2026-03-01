@@ -2,9 +2,7 @@ package Data_Structures_and_Algorithms.Activity3;
 
 import java.util.Scanner;
 
-import java.util.Scanner;
-
-public class RetailDiscount2 {
+public class RetailDiscount_Enchanced {
     static void main(String[] args) {
         // Simulated original prices of products
         // double[] originalPrices = {50.0, 120.0, 80.0, 45.0};

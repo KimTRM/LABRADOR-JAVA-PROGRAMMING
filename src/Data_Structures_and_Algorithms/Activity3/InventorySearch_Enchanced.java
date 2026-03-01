@@ -2,7 +2,7 @@ package Data_Structures_and_Algorithms.Activity3;
 
 import java.util.Scanner;
 
-public class InventorySearch2 {
+public class InventorySearch_Enchanced {
     static void main() {
         Scanner scanner = new Scanner(System.in);
 
