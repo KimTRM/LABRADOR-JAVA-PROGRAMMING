@@ -12,7 +12,7 @@ public class SearchProtect {
 
         IO.print("Enter number of columns: ");
         int cols = scanner.nextInt();
-
+        
         int[][] matrix = new int[rows][cols];
 
         // Input matrix values
