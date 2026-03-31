@@ -1,3 +1,5 @@
+package Intermediate_Prog;
+
 import java.util.Scanner;
 
 public class Labrador_KimLouise_StringManipulation {
