@@ -34,9 +34,9 @@ public class Labrador_KimLouise_StringManipulation {
                     IO.println("Hidden Password: " + passwordHider(password));
                 }
                 case 3 -> {
-                    IO.print("Enter the number of rows for the diamond pattern: ");
-                    String n = scanner.nextLine();
-                    diamondStringPattern(n);
+                    IO.print("Enter a text for the diamond pattern: ");
+                    String input = scanner.nextLine();
+                    diamondStringPattern(input);
                 }
                 case 4 -> {
                     IO.print("Enter a string to convert to snake case: ");
