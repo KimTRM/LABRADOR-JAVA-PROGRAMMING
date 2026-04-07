@@ -2,7 +2,7 @@ package Intermediate_Prog;
 
 import java.util.Scanner;
 
-public class Labrador_KimLouise_StringManipulation {
+public class Labrador_KimLouise_Task7 {
     static void main() {
         Scanner scanner = new Scanner(System.in);
 
