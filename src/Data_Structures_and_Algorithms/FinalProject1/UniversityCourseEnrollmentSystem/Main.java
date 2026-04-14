@@ -20,6 +20,8 @@ public class Main {
             IO.print("Enter choice: ");
             int implementationChoice = scanner.nextInt();
 
+            IO.println();
+
             switch (implementationChoice) {
                 case 1 -> {
                     system = new DirectAddressTableES();
@@ -70,49 +72,38 @@ public class Main {
             switch (choice) {
                 case 1 -> {
                     IO.println("-- Add Enrollment --");
-                    IO.print("Enter student ID: ");
-                    long studentId = scanner.nextLong();
-
-                    IO.print("Enter course ID: ");
-                    int courseId = scanner.nextInt();
+                    long studentId = getValidStudentId(scanner);
+                    int courseId = getValidCourseId(scanner);
 
                     system.addEnrollment(studentId, courseId);
                     IO.println("Enrollment added " + studentId + " -> " + courseId);
                 }
                 case 2 -> {
                     IO.println("-- Remove Enrollment --");
-                    IO.print("Enter student ID: ");
-                    long studentId = scanner.nextLong();
-
-                    IO.print("Enter course ID: ");
-                    int courseId = scanner.nextInt();
+                    long studentId = getValidStudentId(scanner);
+                    int courseId = getValidCourseId(scanner);
 
                     system.removeEnrollment(studentId, courseId);
                     IO.println("Enrollment removed " + studentId + " -> " + courseId);
                 }
                 case 3 -> {
                     IO.println("-- Check Enrollment --");
-                    IO.print("Enter student ID: ");
-                    long studentId = scanner.nextLong();
-
-                    IO.print("Enter course ID: ");
-                    int courseId = scanner.nextInt();
+                    long studentId = getValidStudentId(scanner);
+                    int courseId = getValidCourseId(scanner);
 
                     boolean enrolled = system.isEnrolled(studentId, courseId);
                     IO.println("Enrolled: " + enrolled);
                 }
                 case 4 -> {
                     IO.println("-- Get Students in Course --");
-                    IO.print("Enter course ID: ");
-                    int courseId = scanner.nextInt();
+                    int courseId = getValidCourseId(scanner);
 
                     var studentsInCourse = system.getStudentsInCourse(courseId);
                     IO.println("Students in Course: " + studentsInCourse);
                 }
                 case 5 -> {
                     IO.println("-- Get Courses for Students --");
-                    IO.print("Enter student ID: ");
-                    long studentId = scanner.nextLong();
+                    long studentId = getValidStudentId(scanner);
 
                     var coursesForStudent = system.getCoursesForStudent(studentId);
                     IO.println("Courses for Student: " + coursesForStudent);
@@ -126,5 +117,37 @@ public class Main {
 
             IO.println();
         }
+    }
+
+    static long getValidStudentId(Scanner scanner) {
+        long studentId;
+
+        while (true) {
+            IO.print("Enter Student ID: ");
+            studentId = scanner.nextLong();
+
+            if (studentId < 1000000 || studentId > 9999999)
+                IO.println("Invalid Student ID. Please enter a 7-digit number.");
+            else
+                break;
+        }
+
+        return studentId;
+    }
+
+    static int getValidCourseId(Scanner scanner) {
+        int courseId;
+
+        while (true) {
+            IO.print("Enter course ID: ");
+            courseId = scanner.nextInt();
+
+            if (courseId < 1000 || courseId > 9999)
+                IO.println("Invalid course ID. Please enter a 4-digit number.");
+            else
+                break;
+        }
+
+        return courseId;
     }
 }
