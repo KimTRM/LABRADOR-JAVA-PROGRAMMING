@@ -1,4 +1,4 @@
-package Data_Structures_and_Algorithms.FinalProject1;
+package Data_Structures_and_Algorithms.FinalProblem1;
 
 import java.util.ArrayList;
 import java.util.HashMap;
