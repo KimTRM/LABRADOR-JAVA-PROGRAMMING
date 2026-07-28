@@ -15,6 +15,8 @@ public class Activity10 {
         if (age >= 18) {
             if (isFilipino)
                 IO.println("You are eligible to vote.");
+            else
+                IO.println("You are not eligible to vote.");
         } else
             IO.println("You are not eligible to vote.");
 

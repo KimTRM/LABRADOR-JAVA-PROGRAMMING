@@ -11,10 +11,11 @@ public class Activity20 {
 
         int numPassed = 0;
         int numFailed = 0;
+        float sumGrades = 0;
 
         for (int i = 1; i <= numStudents; i++) {
             IO.println("Enter student " + i + " grade :");
-            int grade = sc.nextInt();
+            float grade = sc.nextInt();
 
             if (grade >= 75) {
                 IO.println("Passed");
@@ -24,12 +25,14 @@ public class Activity20 {
                 numFailed++;
             }
 
+            sumGrades += grade;
+
             IO.println();
         }
 
         IO.println("\n----- Summary -----");
         IO.println("Number of students passed: " + numPassed);
         IO.println("Number of students failed: " + numFailed);
-        IO.println("Average grade: " + (numPassed + numFailed > 0 ? (double) (numPassed * 75 + numFailed * 74) / (numPassed + numFailed) : 0));
+        IO.println("Average grade: " + sumGrades / numStudents);
     }
 }
