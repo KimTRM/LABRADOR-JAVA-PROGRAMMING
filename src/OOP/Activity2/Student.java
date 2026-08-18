@@ -1,4 +1,4 @@
-package OOP;
+package OOP.Activity2;
 
 public class Student {
     private String name;

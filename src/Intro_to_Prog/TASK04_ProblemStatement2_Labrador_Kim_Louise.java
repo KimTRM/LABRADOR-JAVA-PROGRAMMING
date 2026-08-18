@@ -29,7 +29,7 @@ public class TASK04_ProblemStatement2_Labrador_Kim_Louise {
         }
 
         // Output results
-        System.out.println("\nStudent Name: " + studentName);
+        System.out.println("\nOOP.ClassDirectoryRecordingApp.Student Name: " + studentName);
         System.out.println("Numerical Grade: " + grade);
         System.out.println("Letter Grade: " + letterGrade);
 

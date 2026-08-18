@@ -9,7 +9,7 @@ public class T2_LABRADOR_KIM_LOUISE_BCS112L_OCa_AUG_15_2025 {
 
     static void main(String[] args) {
         String matri = "\t\t\t\t\t\t\t\t\t\t" + "UNIVERSITY OF NUEVA CACERES" + "\n" +
-                "Name: Labrador, Kim Louise T." + "\t\t\t\t\t\t\t\t\t\t\t\t" + "Student Number: 19-14239" + "\n" +
+                "Name: Labrador, Kim Louise T." + "\t\t\t\t\t\t\t\t\t\t\t\t" + "OOP.ClassDirectoryRecordingApp.Student Number: 19-14239" + "\n" +
                 "Subject Code" + "\t\t\t" + "Description" + "\t\t\t\t\t\t\t\t\t" + "Schedule" + "\t\t\t" + "No. of Units" + "\n" +
                 "BCS111L-OCa" + "\t\t" + "Introduction to Computing" + "\t\t\t\t\t\t" + "05:30PM-07:30PM  T" + "\t\t\t" + "3" + "\n" +
                 "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + "11:00AM-02:00PM  F" + "\n" +

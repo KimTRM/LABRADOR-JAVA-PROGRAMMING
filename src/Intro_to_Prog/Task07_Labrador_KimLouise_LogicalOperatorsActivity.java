@@ -30,7 +30,7 @@ public class Task07_Labrador_KimLouise_LogicalOperatorsActivity {
         System.out.println("Name: " + name);
         System.out.println("Age: " + age);
         System.out.println("Has ID: " + hasID);
-        System.out.println("Is Student: " + isStudent);
+        System.out.println("Is OOP.ClassDirectoryRecordingApp.Student: " + isStudent);
 
         System.out.println("\nResults:");
         System.out.println("Can enter the event: " + canEnter);

@@ -12,12 +12,12 @@ public class Student_Record_Manager {
         while (true) {
             IO.println("""
                     STUDENT RECORD MANAGER
-                    1. Add Student
-                    2. View Student
-                    3. Search Student
-                    4. Update Student
-                    5. Delete Student
-                    6. Exit Student""");
+                    1. Add OOP.ClassDirectoryRecordingApp.Student
+                    2. View OOP.ClassDirectoryRecordingApp.Student
+                    3. Search OOP.ClassDirectoryRecordingApp.Student
+                    4. Update OOP.ClassDirectoryRecordingApp.Student
+                    5. Delete OOP.ClassDirectoryRecordingApp.Student
+                    6. Exit OOP.ClassDirectoryRecordingApp.Student""");
             IO.print("Enter choice: ");
             int choice = scanner.nextInt();
 
@@ -52,11 +52,11 @@ public class Student_Record_Manager {
         String name = scanner.next();
         students.add(name);
 
-        IO.println("Student added.\n");
+        IO.println("OOP.ClassDirectoryRecordingApp.Student added.\n");
     }
 
     static void viewStudent(ArrayList<String> students) {
-        IO.println("Student List:");
+        IO.println("OOP.ClassDirectoryRecordingApp.Student List:");
         for (String student : students)
             IO.println(student);
 
@@ -68,9 +68,9 @@ public class Student_Record_Manager {
         String name = scanner.next();
 
         if (students.contains(name))
-            IO.println("Student found!\n");
+            IO.println("OOP.ClassDirectoryRecordingApp.Student found!\n");
         else
-            IO.println("Student not found.\n");
+            IO.println("OOP.ClassDirectoryRecordingApp.Student not found.\n");
     }
 
     static void updateStudent(Scanner scanner, ArrayList<String> students) {
@@ -81,7 +81,7 @@ public class Student_Record_Manager {
             IO.print("Enter new name: ");
             String newName = scanner.next();
             students.set(index, newName);
-            IO.println("Student updated.\n");
+            IO.println("OOP.ClassDirectoryRecordingApp.Student updated.\n");
         } else
             IO.println("Invalid index. No student updated.\n");
     }
@@ -97,6 +97,6 @@ public class Student_Record_Manager {
 
         students.remove(index);
 
-        IO.println("Student deleted!\n");
+        IO.println("OOP.ClassDirectoryRecordingApp.Student deleted!\n");
     }
 }

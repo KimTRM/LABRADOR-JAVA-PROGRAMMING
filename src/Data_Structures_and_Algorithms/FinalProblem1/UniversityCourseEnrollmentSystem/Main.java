@@ -14,7 +14,7 @@ public class Main {
                     Choose Enrollment System Implementation:
                     1. Direct Address Table
                     2. Course Hash Table
-                    3. Student Hash Table
+                    3. OOP.ClassDirectoryRecordingApp.Student Hash Table
                     4. Exit
                     """);
             IO.print("Enter choice: ");
@@ -37,7 +37,7 @@ public class Main {
                 }
                 case 3 -> {
                     system = new StudentHashTableES();
-                    name = "Student Hash Table";
+                    name = "OOP.ClassDirectoryRecordingApp.Student Hash Table";
 
                     run(system, scanner, name);
                 }
@@ -60,7 +60,7 @@ public class Main {
                     2. Remove Enrollment
                     3. Check Enrollment
                     4. Get Students in Course
-                    5. Get Courses for Student
+                    5. Get Courses for OOP.ClassDirectoryRecordingApp.Student
                     6. Choose Different Implementation
                     """);
 
@@ -106,7 +106,7 @@ public class Main {
                     long studentId = getValidStudentId(scanner);
 
                     var coursesForStudent = system.getCoursesForStudent(studentId);
-                    IO.println("Courses for Student: " + coursesForStudent);
+                    IO.println("Courses for OOP.ClassDirectoryRecordingApp.Student: " + coursesForStudent);
                 }
                 case 6 -> {
                     IO.print("Exiting...");
@@ -123,11 +123,11 @@ public class Main {
         long studentId;
 
         while (true) {
-            IO.print("Enter Student ID: ");
+            IO.print("Enter OOP.ClassDirectoryRecordingApp.Student ID: ");
             studentId = scanner.nextLong();
 
             if (studentId < 1000000 || studentId > 9999999)
-                IO.println("Invalid Student ID. Please enter a 7-digit number.");
+                IO.println("Invalid OOP.ClassDirectoryRecordingApp.Student ID. Please enter a 7-digit number.");
             else
                 break;
         }

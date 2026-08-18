@@ -18,8 +18,8 @@ public class Activity3 {
         IO.println("What is your age?");
         int Age = sc.nextInt();
 
-        IO.println("\n----- Student Information-----");
-        IO.println("Student Number: " + studentNumber);
+        IO.println("\n----- OOP.ClassDirectoryRecordingApp.Student Information-----");
+        IO.println("OOP.ClassDirectoryRecordingApp.Student Number: " + studentNumber);
         IO.println("Full Name: " + fullName);
         IO.println("Course: " + Course);
         IO.println("Age: " + Age);

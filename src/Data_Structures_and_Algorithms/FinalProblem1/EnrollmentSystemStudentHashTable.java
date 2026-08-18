@@ -10,11 +10,11 @@ public class EnrollmentSystemStudentHashTable {
 
         while (true) {
             IO.println("""
-                    Enrollment System Student - Choose an option:
+                    Enrollment System OOP.ClassDirectoryRecordingApp.Student - Choose an option:
                     1. Add Enrollment
                     2. Remove Enrollment
                     3. Check Enrollment
-                    4. Get Courses for Student
+                    4. Get Courses for OOP.ClassDirectoryRecordingApp.Student
                     5. Get Students in Course
                     6. Exit
                     """);
@@ -49,7 +49,7 @@ public class EnrollmentSystemStudentHashTable {
                     int courseId = scanner.nextInt();
 
                     boolean enrolled = isEnrolled(map, studentId, courseId);
-                    IO.println("Student " + studentId + (enrolled ? " is " : " is not ") + "enrolled in course " + courseId + ".");
+                    IO.println("OOP.ClassDirectoryRecordingApp.Student " + studentId + (enrolled ? " is " : " is not ") + "enrolled in course " + courseId + ".");
                 }
                 case 4 -> {
                     IO.print("Enter student ID: ");
@@ -57,9 +57,9 @@ public class EnrollmentSystemStudentHashTable {
 
                     List<Integer> courses = getCoursesForStudent(map, studentId);
                     if (courses.isEmpty()) {
-                        IO.println("Student " + studentId + " is not enrolled in any courses.");
+                        IO.println("OOP.ClassDirectoryRecordingApp.Student " + studentId + " is not enrolled in any courses.");
                     } else {
-                        IO.println("Student " + studentId + " is enrolled in courses: " + courses);
+                        IO.println("OOP.ClassDirectoryRecordingApp.Student " + studentId + " is enrolled in courses: " + courses);
                     }
                 }
                 case 5 -> {

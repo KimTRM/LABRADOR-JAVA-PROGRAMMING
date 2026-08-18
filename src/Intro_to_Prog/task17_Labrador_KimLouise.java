@@ -9,7 +9,7 @@ public class task17_Labrador_KimLouise {
 
         do {
             // Asks the user for the number of students
-            System.out.println("\nStudent Information Analytics System\n");
+            System.out.println("\nOOP.ClassDirectoryRecordingApp.Student Information Analytics System\n");
             System.out.print("Number of Students: ");
             int numberOfStudents = scanner.nextInt();
             scanner.nextLine();
@@ -24,7 +24,7 @@ public class task17_Labrador_KimLouise {
 
             // Loops through each student to collect their information
             for (int i = 0; i < numberOfStudents; i++) {
-                System.out.println("\nStudent #" + (i + 1));
+                System.out.println("\nOOP.ClassDirectoryRecordingApp.Student #" + (i + 1));
                 System.out.print("Enter name: ");
                 names[i] = scanner.nextLine();
 

@@ -1,4 +1,4 @@
-package OOP;
+package OOP.Activity2;
 
 import java.util.Scanner;
 

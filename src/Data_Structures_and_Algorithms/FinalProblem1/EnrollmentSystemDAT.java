@@ -25,7 +25,7 @@ public class EnrollmentSystemDAT {
                     1. Add Enrollment
                     2. Remove Enrollment
                     3. Check Enrollment
-                    4. Get Courses for Student
+                    4. Get Courses for OOP.ClassDirectoryRecordingApp.Student
                     5. Get Students in Course
                     6. Exit
                     """);
@@ -60,7 +60,7 @@ public class EnrollmentSystemDAT {
                     int courseId = scanner.nextInt();
 
                     boolean enrolled = isEnrolled(table, studentId, courseId);
-                    IO.println("Student " + studentId + (enrolled ? " is " : " is not ") + "enrolled in course " + courseId + ".");
+                    IO.println("OOP.ClassDirectoryRecordingApp.Student " + studentId + (enrolled ? " is " : " is not ") + "enrolled in course " + courseId + ".");
                 }
                 case 4 -> {
                     IO.print("Enter student ID: ");

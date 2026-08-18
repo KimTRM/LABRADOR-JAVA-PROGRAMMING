@@ -9,7 +9,7 @@ public class Prob003_Labrador_Kim {
         int sum = 0; // Variable to store total
 
         for (int i = 0; i < scores.length; i++) { // Loop for input
-            IO.print("Student " + (i + 1) + ": "); // Ask input
+            IO.print("OOP.ClassDirectoryRecordingApp.Student " + (i + 1) + ": "); // Ask input
             scores[i] = scanner.nextInt(); // Store score
             sum += scores[i]; // Add to total
         }

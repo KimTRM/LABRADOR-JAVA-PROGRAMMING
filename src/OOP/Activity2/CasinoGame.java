@@ -1,4 +1,4 @@
-package OOP;
+package OOP.Activity2;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -28,7 +28,7 @@ public class CasinoGame {
                 IO.println("\nThank you for playing!");
                 IO.println("Final Balance: " + balance);
                 IO.println("Starting Balance: " + startingBalance);
-                
+
                 break;
             }
         }
