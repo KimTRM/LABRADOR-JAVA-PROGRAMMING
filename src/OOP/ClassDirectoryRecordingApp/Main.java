@@ -1,268 +1,472 @@
 package OOP.ClassDirectoryRecordingApp;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private static final ClassSection classSection = new ClassSection();
+    private static final ArrayList<ClassSection> sections = new ArrayList<>();
+
+    private static ClassSection currentSection;
+
+
+    // ================ MAIN =================
 
     static void main(String[] args) {
-        System.out.println("=== WELCOME TO THE SCHOOL CLASS DIRECTORY SYSTEM ===");
 
-        // Detect if a saved Class Section file already exists
-        if (classSection.hasExistingDirectoryFile()) {
-            System.out.println(">> Existing Class Section file detected (ClassDirectory.txt).");
-            System.out.println(">> Automatically loading saved section details...");
-            classSection.loadFromFile();
-        } else {
-            System.out.println("No existing section detected. Please set up initial class section information.");
+        loadAvailableSections();
 
-            System.out.print("Enter Grade Level (e.g., Grade 10): ");
-            classSection.setGradeLevel(scanner.nextLine().trim());
-
-            System.out.print("Enter Section Name (e.g., Newton): ");
-            classSection.setSectionName(scanner.nextLine().trim());
-        }
+        IO.println("=== SCHOOL CLASS DIRECTORY SYSTEM ===");
 
         while (true) {
-            System.out.println("\n=== SCHOOL CLASS DIRECTORY SYSTEM ===");
-            System.out.println("""
-                    [1] View Class Directory
-                    [2] Assign/Update Adviser
-                    [3] Add Student
-                    [4] Update Student by LRN
-                    [5] Save Directory to File
-                    [6] Load Directory from File
-                    [7] Exit
+
+            IO.println();
+
+            if (currentSection != null) {
+                IO.println("Current Section: "
+                        + currentSection.getGradeLevel() + " - "
+                        + currentSection.getSectionName());
+            } else {
+                IO.println("Current Section: None");
+            }
+
+            IO.println();
+
+            IO.println("""
+                    [1] Create New Class Section
+                    [2] Select Class Section
+                    [3] View Class Section
+                    [4] Assign/Update Adviser
+                    [5] Add Student
+                    [6] Update Student
+                    [7] Save Class Section
+                    [8] Load Class Section
+                    [9] List Class Sections
+                    [10] Exit
                     """);
 
-            System.out.print("Select an option: ");
-            String choice = scanner.nextLine().trim();
+            int choice = readInt("Select an option: ");
 
-            System.out.println();
+            IO.println();
 
             switch (choice) {
-                case "1" -> viewClassDirectory();
-                case "2" -> upsertAdviser();
-                case "3" -> addStudent();
-                case "4" -> updateStudent();
-                case "5" -> classSection.saveToFile();
-                case "6" -> classSection.loadFromFile();
-                case "7" -> {
-                    System.out.println("Exiting program. Goodbye!");
+                case 1 -> createSection();
+                case 2 -> selectSection();
+                case 3 -> viewSection();
+                case 4 -> assignAdviser();
+                case 5 -> addStudent();
+                case 6 -> updateStudent();
+                case 7 -> saveSection();
+                case 8 -> loadSection();
+                case 9 -> listSections();
+                case 10 -> {
+                    IO.println("Exiting program. Goodbye!");
+                    scanner.close();
                     return;
                 }
-                default -> System.out.println("Invalid choice. Please enter a choice between 1 and 7.");
+                default -> IO.println(">> Invalid option. Please choose 1-10.");
             }
         }
     }
 
-    /**
-     * Displays the class directory, including adviser information and enrolled
-     * students in the specified formatting layout.
-     */
-    private static void viewClassDirectory() {
-        System.out.println("==================================================");
-        System.out.println("CLASS SECTION DIRECTORY");
-        System.out.println("Grade Level: " + classSection.getGradeLevel() + " Section Name: " + classSection.getSectionName());
 
-        System.out.println("--------------------------------------------------");
-        System.out.println("ADVISER INFORMATION:");
+    // ================ CREATE SECTION =================
 
-        Adviser adviser = classSection.getAdviser();
-        if (adviser != null && adviser.getLastName() != null) {
-            System.out.println("Name: Prof. " + adviser.getFirstName() + " " + adviser.getMiddleName() + " " + adviser.getLastName());
-            System.out.println("Gender: " + adviser.getGender() + " | Birthdate: " + adviser.getBirthdate() + " (Age: " + adviser.getComputedAge() + ")");
-            System.out.println("Contact: " + adviser.getContactNumber() + " | Degree: " + adviser.getHighestDegreeEarned());
-        } else {
-            System.out.println("No adviser assigned yet.");
-        }
+    private static void createSection() {
 
-        System.out.println("--------------------------------------------------");
-        var students = classSection.getStudents();
-        System.out.println("ENROLLED STUDENTS (Sorted Alphabetically - Total: " + students.size() + ")");
+        IO.println("--- CREATE NEW CLASS SECTION ---");
 
-        if (!students.isEmpty()) {
-            for (int i = 0; i < students.size(); i++) {
-                Student student = students.get(i);
-                System.out.println("[" + (i + 1) + "] LRN: " + student.getLRN());
-                System.out.println("Name: " + student.getLastName() + ", " + student.getFirstName() + " " + student.getMiddleName());
-                System.out.println("Gender: " + student.getGender() + " | Birthdate: " + student.getBirthdate() + " (Age: " + student.getComputedAge() + ") | Contact: " + student.getContactNumber());
-                System.out.println("Address: " + student.getHomeAddress());
+        String grade = readText("Enter Grade Level: ");
+        String name = readText("Enter Section Name: ");
+
+        for (ClassSection section : sections) {
+            if (section.getGradeLevel().equalsIgnoreCase(grade)
+                    && section.getSectionName().equalsIgnoreCase(name)) {
+
+                IO.println(">> This class section already exists.");
+                return;
             }
-        } else {
-            System.out.println("No students enrolled yet.");
         }
 
-        System.out.println("==================================================");
+        ClassSection section = new ClassSection();
+
+        section.setGradeLevel(grade);
+        section.setSectionName(name);
+
+        sections.add(section);
+        currentSection = section;
+
+        section.saveToFile();
+
+        IO.println(">> Class section created successfully!");
+        IO.println(">> File created in ClassDirectories folder.");
     }
 
-    /**
-     * Prompt interface for creating or editing the assigned Adviser profile.
-     */
-    private static void upsertAdviser() {
-        Adviser adviser = classSection.getAdviser();
-        if (adviser == null) {
-            adviser = new Adviser();
-        }
 
-        System.out.println("--- ASSIGN/UPDATE ADVISER ---");
-        System.out.print("Enter Last Name: ");
-        adviser.setLastName(scanner.nextLine().trim());
+    // ================ SELECT SECTION =================
 
-        System.out.print("Enter First Name: ");
-        adviser.setFirstName(scanner.nextLine().trim());
+    private static void selectSection() {
 
-        System.out.print("Enter Middle Name: ");
-        adviser.setMiddleName(scanner.nextLine().trim());
-
-        System.out.print("Enter Gender: ");
-        adviser.setGender(scanner.nextLine().trim());
-
-        // Validate birthdate input
-        while (true) {
-            System.out.print("Enter Birthdate (YYYY-MM-DD): ");
-            String birthdate = scanner.nextLine().trim();
-            String validationMessage = Person.validateBirthdate(birthdate);
-
-            if (validationMessage == null) {
-                adviser.setBirthdate(birthdate);
-                break;
-            } else {
-                System.out.println(validationMessage);
-            }
-        }
-
-        System.out.print("Enter Contact Number: ");
-        adviser.setContactNumber(scanner.nextLong());
-
-        System.out.print("Enter Highest Degree Earned: ");
-        adviser.setHighestDegreeEarned(scanner.nextLine().trim());
-
-        classSection.setAdviser(adviser);
-        System.out.println(">> Adviser information updated successfully!");
-    }
-
-    /**
-     * Prompt interface for creating a new student record and adding it to the class directory.
-     */
-    private static void addStudent() {
-        Student student = new Student();
-        System.out.println("--- ADD NEW STUDENT ---");
-
-        // Validate LRN input and ensure it's unique
-        while (true) {
-            System.out.print("Enter LRN: ");
-            long lrn = scanner.nextLong();
-            scanner.nextLine(); // Consume the newline character
-
-            String validationMessage = Student.validateLRN(lrn);
-
-            if (validationMessage != null) {
-                System.out.println(validationMessage);
-                continue;
-            }
-
-            if (Student.findStudentByLRN(lrn, classSection.getStudents()) != null) {
-                System.out.println(">> LRN already exists! Student LRN must be unique.");
-                continue;
-            }
-
-            student.setLRN(lrn);
-            break;
-        }
-
-        System.out.print("Enter Last Name: ");
-        student.setLastName(scanner.nextLine().trim());
-
-        System.out.print("Enter First Name: ");
-        student.setFirstName(scanner.nextLine().trim());
-
-        System.out.print("Enter Middle Name: ");
-        student.setMiddleName(scanner.nextLine().trim());
-
-        System.out.print("Enter Gender: ");
-        student.setGender(scanner.nextLine().trim());
-
-        // Validate birthdate input
-        while (true) {
-            System.out.print("Enter Birthdate (YYYY-MM-DD): ");
-            String birthdate = scanner.nextLine().trim();
-            String validationMessage = Person.validateBirthdate(birthdate);
-
-            if (validationMessage == null) {
-                student.setBirthdate(birthdate);
-                break;
-            } else {
-                System.out.println(validationMessage);
-            }
-        }
-
-        System.out.print("Enter Contact Number: ");
-        student.setContactNumber(scanner.nextLong());
-
-        scanner.nextLine(); // Consume the newline character after reading the contact number
-
-        System.out.print("Enter Home Address: ");
-        student.setHomeAddress(scanner.nextLine().trim());
-
-        classSection.addStudent(student);
-        System.out.println(">> Student added successfully!");
-    }
-
-    /**
-     * Prompt interface to search for a student by LRN and edit their attributes.
-     */
-    private static void updateStudent() {
-        System.out.println("--- UPDATE STUDENT ---");
-        System.out.print("Enter LRN to Search: ");
-        long lrn = scanner.nextLong();
-
-        Student student = Student.findStudentByLRN(lrn, classSection.getStudents());
-
-        if (student == null) {
-            System.out.println(">> Student with LRN " + lrn + " not found!");
+        if (sections.isEmpty()) {
+            IO.println(">> No class sections available.");
             return;
         }
 
-        System.out.println("Student found: " + student.getFirstName() + " " + student.getLastName());
-        System.out.println("Enter updated details:");
+        listSections();
 
-        System.out.print("Enter Last Name: ");
-        student.setLastName(scanner.nextLine().trim());
+        int choice = readInt("Select class section number: ");
 
-        System.out.print("Enter First Name: ");
-        student.setFirstName(scanner.nextLine().trim());
-
-        System.out.print("Enter Middle Name: ");
-        student.setMiddleName(scanner.nextLine().trim());
-
-        System.out.print("Enter Gender: ");
-        student.setGender(scanner.nextLine().trim());
-
-        while (true) {
-            System.out.print("Enter Birthdate (YYYY-MM-DD): ");
-            String birthdate = scanner.nextLine().trim();
-            String validationMessage = Person.validateBirthdate(birthdate);
-
-            if (validationMessage == null) {
-                student.setBirthdate(birthdate);
-                break;
-            } else {
-                System.out.println(validationMessage);
-            }
+        if (choice < 1 || choice > sections.size()) {
+            IO.println(">> Invalid section number.");
+            return;
         }
 
-        System.out.print("Enter Contact Number: ");
-        student.setContactNumber(scanner.nextLong());
+        currentSection = sections.get(choice - 1);
 
-        scanner.nextLine(); // Consume the newline character after reading the contact number
+        IO.println(">> Class section selected successfully.");
+    }
 
-        System.out.print("Enter Home Address: ");
-        student.setHomeAddress(scanner.nextLine().trim());
 
-        classSection.sortStudents();
-        System.out.println(">> Student updated successfully!");
+    // ================ VIEW SECTION =================
+
+    private static void viewSection() {
+
+        if (checkSection()) {
+            return;
+        }
+
+        currentSection.displayDirectory();
+    }
+
+
+    // ================ ADVISER =================
+
+    private static void assignAdviser() {
+
+        if (checkSection()) {
+            return;
+        }
+
+        IO.println("--- ASSIGN/UPDATE ADVISER ---");
+
+        Adviser adviser = new Adviser();
+
+        adviser.setLastName(readText("Enter Last Name: "));
+        adviser.setFirstName(readText("Enter First Name: "));
+        adviser.setMiddleName(readText("Enter Middle Name: "));
+        adviser.setGender(readText("Enter Gender: "));
+        adviser.setBirthdate(readBirthdate());
+        adviser.setContactNumber(readLong("Enter Contact Number: "));
+        adviser.setHighestDegreeEarned(readText("Enter Highest Degree Earned: "));
+
+        currentSection.setAdviser(adviser);
+
+        IO.println(">> Adviser information updated successfully!");
+    }
+
+
+    // ================ ADD STUDENT =================
+
+    private static void addStudent() {
+
+        if (checkSection()) {
+            return;
+        }
+
+        IO.println("--- ADD NEW STUDENT ---");
+
+        Student student = new Student();
+
+        long LRN;
+
+        while (true) {
+
+            LRN = readLong("Enter LRN: ");
+
+            String message = Student.validateLRN(LRN);
+
+            if (message != null) {
+                IO.println(message);
+                continue;
+            }
+
+            if (currentSection.findStudent(LRN) != null) {
+                IO.println(">> LRN already exists!");
+                continue;
+            }
+
+            break;
+        }
+
+        student.setLRN(LRN);
+        student.setLastName(readText("Enter Last Name: "));
+        student.setFirstName(readText("Enter First Name: "));
+        student.setMiddleName(readText("Enter Middle Name: "));
+        student.setGender(readText("Enter Gender: "));
+        student.setBirthdate(readBirthdate());
+        student.setContactNumber(readLong("Enter Contact Number: "));
+        student.setHomeAddress(readText("Enter Home Address: "));
+
+        currentSection.addStudent(student);
+
+        IO.println(">> Student added successfully!");
+    }
+
+
+    // ================ UPDATE STUDENT =================
+
+    private static void updateStudent() {
+
+        if (checkSection()) {
+            return;
+        }
+
+        IO.println("--- UPDATE STUDENT ---");
+
+        long LRN = readLong("Enter LRN to Search: ");
+
+        Student oldStudent = currentSection.findStudent(LRN);
+
+        if (oldStudent == null) {
+            IO.println(">> Student with LRN " + LRN + " not found!");
+            return;
+        }
+
+        IO.println("Student found: " + oldStudent.getFirstName()
+                + " " + oldStudent.getLastName());
+
+        Student newStudent = new Student();
+
+        long newLRN;
+
+        while (true) {
+
+            newLRN = readLong("Enter New LRN: ");
+
+            String message = Student.validateLRN(newLRN);
+
+            if (message != null) {
+                IO.println(message);
+                continue;
+            }
+
+            Student existing = currentSection.findStudent(newLRN);
+
+            if (existing != null && existing != oldStudent) {
+                IO.println(">> That LRN already belongs to another student.");
+                continue;
+            }
+
+            break;
+        }
+
+        newStudent.setLRN(newLRN);
+        newStudent.setLastName(readText("Enter Last Name: "));
+        newStudent.setFirstName(readText("Enter First Name: "));
+        newStudent.setMiddleName(readText("Enter Middle Name: "));
+        newStudent.setGender(readText("Enter Gender: "));
+        newStudent.setBirthdate(readBirthdate());
+        newStudent.setContactNumber(readLong("Enter Contact Number: "));
+        newStudent.setHomeAddress(readText("Enter Home Address: "));
+
+        currentSection.updateStudent(LRN, newStudent);
+
+        IO.println(">> Student updated successfully!");
+    }
+
+
+    // ================ SAVE =================
+
+    private static void saveSection() {
+
+        if (checkSection()) {
+            return;
+        }
+
+        if (currentSection.saveToFile()) {
+            IO.println(">> Class section saved successfully!");
+        } else {
+            IO.println(">> Failed to save class section.");
+        }
+    }
+
+
+    // ================ LOAD =================
+
+    private static void loadSection() {
+
+        if (sections.isEmpty()) {
+            IO.println(">> No class sections available.");
+            return;
+        }
+
+        listSections();
+
+        int choice = readInt("Select section to load: ");
+
+        if (choice < 1 || choice > sections.size()) {
+            IO.println(">> Invalid section number.");
+            return;
+        }
+
+        ClassSection section = sections.get(choice - 1);
+
+        if (section.loadFromFile()) {
+            currentSection = section;
+            IO.println(">> Class section loaded successfully!");
+        } else {
+            IO.println(">> Failed to load class section.");
+        }
+    }
+
+
+    // ================ LIST SECTIONS =================
+
+    private static void listSections() {
+
+        if (sections.isEmpty()) {
+            IO.println(">> No class sections found.");
+            return;
+        }
+
+        IO.println("--- AVAILABLE CLASS SECTIONS ---");
+
+        for (int i = 0; i < sections.size(); i++) {
+
+            ClassSection section = sections.get(i);
+
+            IO.println("[" + (i + 1) + "] "
+                    + section.getGradeLevel() + " - "
+                    + section.getSectionName());
+        }
+    }
+
+
+    // ================ LOAD EXISTING FILES =================
+
+    /*
+     * Loads all existing section files when the program starts.
+     * If the folder does not exist, it will be created.
+     */
+    private static void loadAvailableSections() {
+
+        File folder = new File("ClassDirectories");
+
+        if (!folder.exists()) {
+            folder.mkdirs();
+            return;
+        }
+
+        File[] files = folder.listFiles();
+
+        if (files == null) {
+            return;
+        }
+
+        for (File file : files) {
+
+            if (!file.getName().endsWith(".txt")) {
+                continue;
+            }
+
+            String fileName = file.getName().replace(".txt", "");
+            String[] parts = fileName.split("_", 2);
+
+            if (parts.length != 2) {
+                continue;
+            }
+
+            ClassSection section = new ClassSection();
+
+            section.setGradeLevel(parts[0]);
+            section.setSectionName(parts[1]);
+
+            if (section.loadFromFile()) {
+                sections.add(section);
+            }
+        }
+    }
+
+
+    // ================ INPUT METHODS =================
+
+    // Reads text input and prevents empty values
+    private static String readText(String message) {
+
+        while (true) {
+
+            System.out.print(message);
+
+            String input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) {
+                IO.println(">> This field cannot be empty.");
+            } else {
+                return input;
+            }
+        }
+    }
+
+    // Reads a long number without crashing
+    private static long readLong(String message) {
+
+        while (true) {
+
+            System.out.print(message);
+
+            String input = scanner.nextLine().trim();
+
+            try {
+                return Long.parseLong(input);
+            } catch (NumberFormatException e) {
+                IO.println(">> Please enter a valid number.");
+            }
+        }
+    }
+
+    // Reads an integer without crashing
+    private static int readInt(String message) {
+
+        while (true) {
+
+            System.out.print(message);
+
+            String input = scanner.nextLine().trim();
+
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                IO.println(">> Please enter a valid number.");
+            }
+        }
+    }
+
+    // Reads and validates a birthdate
+    private static String readBirthdate() {
+
+        while (true) {
+
+            String birthdate = readText("Enter Birthdate (YYYY-MM-DD): ");
+            String message = Person.validateBirthdate(birthdate);
+
+            if (message == null) {
+                return birthdate;
+            }
+
+            IO.println(message);
+        }
+    }
+
+    // Checks if a class section is currently selected
+    private static boolean checkSection() {
+
+        if (currentSection == null) {
+            IO.println(">> Please select a class section first.");
+            return true;
+        }
+
+        return false;
     }
 }

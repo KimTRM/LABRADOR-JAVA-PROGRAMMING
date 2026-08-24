@@ -1,0 +1,11 @@
+GRADE=10
+SECTION=Abad
+ADVISER
+test
+test
+test
+Female
+2000-07-20
+0
+k
+STUDENTS

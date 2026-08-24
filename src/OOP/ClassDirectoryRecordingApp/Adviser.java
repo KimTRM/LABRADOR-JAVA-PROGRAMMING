@@ -13,7 +13,7 @@ public class Adviser extends Person {
     }
 
     // ================ SETTERS =================
-    
+
     public void setHighestDegreeEarned(String highestDegreeEarned) {
         this.highestDegreeEarned = highestDegreeEarned;
     }

@@ -1,10 +1,10 @@
 package OOP.ClassDirectoryRecordingApp;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.time.Period;
 
 public abstract class Person {
+
     // ================ ATTRIBUTES =================
 
     private String lastName;
@@ -13,6 +13,7 @@ public abstract class Person {
     private String gender;
     private String birthdate;
     private long contactNumber;
+
 
     // ================ GETTERS =================
 
@@ -70,30 +71,19 @@ public abstract class Person {
 
     // ================ ADDITIONAL METHODS =================
 
-    /**
-     * Calculates the person's current age based on their birthdate
-     * and the current system date.
-     */
+    // Calculates the current age based on the birthdate
     public int getComputedAge() {
-        // Assuming the birthdate is in the format "YYYY-MM-DD"
-        String birthDateRaw = birthdate.replace("-", "");
-        int birthDate = Integer.parseInt(birthDateRaw);
-        int currentDate = Integer.parseInt(LocalDate.now().toString().replace("-", ""));
-
-        return (currentDate - birthDate) / 10000;
+        LocalDate birthDate = LocalDate.parse(birthdate);
+        return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
-    /**
-     * Validates whether a birthdate is a real date
-     * and follows the YYYY-MM-DD format.
-     */
-    static String validateBirthdate(String birthdate) {
-        // Validate the birthdate format (YYYY-MM-DD)
-        if (!birthdate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            return "Invalid birthdate format. Please use YYYY-MM-DD.";
+    // Checks if the birthdate is valid
+    public static String validateBirthdate(String birthdate) {
+        try {
+            LocalDate.parse(birthdate);
+            return null;
+        } catch (Exception e) {
+            return ">> Invalid birthdate. Please use YYYY-MM-DD.";
         }
-        return null; // Valid
     }
-
-
 }

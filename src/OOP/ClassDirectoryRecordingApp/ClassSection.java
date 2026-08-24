@@ -10,17 +10,17 @@ public class ClassSection {
     private String gradeLevel;
     private String sectionName;
 
-    // ClassSection contains one adviser
+    // Composition
     private Adviser adviser;
-
-    // ClassSection contains a list of enrolled students
     private final ArrayList<Student> students;
+
 
     // ================ CONSTRUCTOR =================
 
     public ClassSection() {
-        this.students = new ArrayList<>();
+        students = new ArrayList<>();
     }
+
 
     // ================ GETTERS =================
 
@@ -40,6 +40,7 @@ public class ClassSection {
         return students;
     }
 
+
     // ================ SETTERS =================
 
     public void setGradeLevel(String gradeLevel) {
@@ -54,22 +55,58 @@ public class ClassSection {
         this.adviser = adviser;
     }
 
+
     // ================ STUDENT METHODS =================
 
-    /**
-     * Adds a student to the roster and sorts the list alphabetically.
-     *
-     * @param student Student instance to append.
-     */
-    public void addStudent(Student student) {
+    // Adds a student to this class section
+    public boolean addStudent(Student student) {
+        if (findStudent(student.getLRN()) != null) {
+            return false;
+        }
+
         students.add(student);
         sortStudents();
+
+        return true;
     }
 
-    /**
-     * Sorts students alphabetically by Last Name (Primary),
-     * using First Name as a secondary sort if Last Names are identical.
-     */
+    // Searches for a student using LRN
+    public Student findStudent(long LRN) {
+        for (Student student : students) {
+            if (student.getLRN() == LRN) {
+                return student;
+            }
+        }
+
+        return null;
+    }
+
+    // Updates an existing student
+    public boolean updateStudent(long LRN, Student newStudent) {
+        Student student = findStudent(LRN);
+
+        if (student == null) {
+            return false;
+        }
+
+        student.setLRN(newStudent.getLRN());
+        student.setLastName(newStudent.getLastName());
+        student.setFirstName(newStudent.getFirstName());
+        student.setMiddleName(newStudent.getMiddleName());
+        student.setGender(newStudent.getGender());
+        student.setBirthdate(newStudent.getBirthdate());
+        student.setContactNumber(newStudent.getContactNumber());
+        student.setHomeAddress(newStudent.getHomeAddress());
+
+        sortStudents();
+
+        return true;
+    }
+
+
+    // ================ CUSTOM SORTING =================
+
+    // Sorts the students in this class section alphabetically by last name, then first name
     public void sortStudents() {
         for (int i = 0; i < students.size() - 1; i++) {
             for (int j = i + 1; j < students.size(); j++) {
@@ -77,16 +114,16 @@ public class ClassSection {
                 Student first = students.get(i);
                 Student second = students.get(j);
 
-                int lastNameCompare = first.getLastName().compareToIgnoreCase(second.getLastName());
+                int lastNameCompare = first.getLastName()
+                        .compareToIgnoreCase(second.getLastName());
 
-                // Swap if the second student's last name comes before the first student's
                 if (lastNameCompare > 0) {
                     students.set(i, second);
                     students.set(j, first);
-                }
-                // If last names match, compare first names
-                else if (lastNameCompare == 0) {
-                    int firstNameCompare = first.getFirstName().compareToIgnoreCase(second.getFirstName());
+                } else if (lastNameCompare == 0) {
+
+                    int firstNameCompare = first.getFirstName()
+                            .compareToIgnoreCase(second.getFirstName());
 
                     if (firstNameCompare > 0) {
                         students.set(i, second);
@@ -97,31 +134,82 @@ public class ClassSection {
         }
     }
 
-    // ================ FILE PROCESSING & DETECTION =================
 
-    /**
-     * Checks if a saved directory file already exists on the local storage.
-     *
-     * @return true if ClassDirectory.txt exists, false otherwise.
-     */
-    public boolean hasExistingDirectoryFile() {
-        File file = new File("ClassDirectory.txt");
-        return file.exists() && file.isFile();
+    // ================ DISPLAY =================
+
+    public void displayDirectory() {
+        sortStudents();
+
+        System.out.println("==================================================");
+        System.out.println("CLASS SECTION DIRECTORY");
+        System.out.println("Grade Level: " + gradeLevel + " Section Name: " + sectionName);
+        System.out.println("--------------------------------------------------");
+        System.out.println("ADVISER INFORMATION:");
+
+        if (adviser == null) {
+            System.out.println("No adviser assigned yet.");
+        } else {
+            System.out.println("Name: Prof. " + adviser.getFirstName() + " "
+                    + adviser.getMiddleName() + " " + adviser.getLastName());
+
+            System.out.println("Gender: " + adviser.getGender()
+                    + " | Birthdate: " + adviser.getBirthdate()
+                    + " (Age: " + adviser.getComputedAge() + ")");
+
+            System.out.println("Contact: " + adviser.getContactNumber()
+                    + " | Degree: " + adviser.getHighestDegreeEarned());
+        }
+
+        System.out.println("--------------------------------------------------");
+        System.out.println("ENROLLED STUDENTS (Sorted Alphabetically - Total: "
+                + students.size() + ")");
+
+        if (students.isEmpty()) {
+            System.out.println("No students enrolled yet.");
+        } else {
+            for (int i = 0; i < students.size(); i++) {
+                Student student = students.get(i);
+
+                System.out.println("[" + (i + 1) + "] LRN: " + student.getLRN());
+                System.out.println("Name: " + student.getLastName() + ", "
+                        + student.getFirstName() + " " + student.getMiddleName());
+
+                System.out.println("Gender: " + student.getGender()
+                        + " | Birthdate: " + student.getBirthdate()
+                        + " (Age: " + student.getComputedAge() + ")"
+                        + " | Contact: " + student.getContactNumber());
+
+                System.out.println("Address: " + student.getHomeAddress());
+            }
+        }
+
+        System.out.println("==================================================");
     }
 
-    /**
-     * Exports all class section details, adviser profile, and student records
-     * to a formatted text file (ClassDirectory.txt).
-     */
-    public void saveToFile() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter("ClassDirectory.txt"))) {
 
-            writer.println("GRADE=" + (gradeLevel != null ? gradeLevel : ""));
-            writer.println("SECTION=" + (sectionName != null ? sectionName : ""));
+    // ================ FILE METHODS =================
 
-            // Save Adviser Profile
-            if (adviser != null) {
-                writer.println("ADVISER");
+    // Saves this section to its own text file
+    public boolean saveToFile() {
+        File folder = new File("ClassDirectories");
+
+        // Creates the folder if it does not exist
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        try {
+            PrintWriter writer = new PrintWriter(
+                    new FileWriter(new File(folder, getFileName())));
+
+            writer.println("GRADE=" + gradeLevel);
+            writer.println("SECTION=" + sectionName);
+
+            writer.println("ADVISER");
+
+            if (adviser == null) {
+                writer.println("NONE");
+            } else {
                 writer.println(adviser.getLastName());
                 writer.println(adviser.getFirstName());
                 writer.println(adviser.getMiddleName());
@@ -131,8 +219,8 @@ public class ClassSection {
                 writer.println(adviser.getHighestDegreeEarned());
             }
 
-            // Save Student List
             writer.println("STUDENTS");
+
             for (Student student : students) {
                 writer.println("STUDENT");
                 writer.println(student.getLRN());
@@ -145,28 +233,29 @@ public class ClassSection {
                 writer.println(student.getHomeAddress());
             }
 
-            System.out.println(">> Directory successfully saved to ClassDirectory.txt");
+            writer.close();
+            return true;
 
         } catch (IOException e) {
-            System.out.println(">> Error saving file: " + e.getMessage());
+            System.out.println(">> Error saving file.");
+            return false;
         }
     }
 
-    /**
-     * Parses ClassDirectory.txt and populates the ClassSection, Adviser,
-     * and Student objects in memory. Automatically sorts roster after loading.
-     */
-    public void loadFromFile() {
-        if (!hasExistingDirectoryFile()) {
-            System.out.println(">> File ClassDirectory.txt not found. No existing section data loaded.");
-            return;
+    // Loads this section from its text file
+    public boolean loadFromFile() {
+        File file = new File("ClassDirectories", getFileName());
+
+        if (!file.exists()) {
+            System.out.println(">> File not found.");
+            return false;
         }
 
-        File file = new File("ClassDirectory.txt");
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
 
             students.clear();
+
             String line;
 
             while ((line = reader.readLine()) != null) {
@@ -177,20 +266,26 @@ public class ClassSection {
                     sectionName = line.substring(8);
                 } else if (line.equals("ADVISER")) {
 
-                    Adviser newAdviser = new Adviser();
-                    newAdviser.setLastName(reader.readLine());
-                    newAdviser.setFirstName(reader.readLine());
-                    newAdviser.setMiddleName(reader.readLine());
-                    newAdviser.setGender(reader.readLine());
-                    newAdviser.setBirthdate(reader.readLine());
-                    newAdviser.setContactNumber(Long.parseLong(reader.readLine()));
-                    newAdviser.setHighestDegreeEarned(reader.readLine());
+                    line = reader.readLine();
 
-                    adviser = newAdviser;
+                    if (!line.equals("NONE")) {
+                        Adviser newAdviser = new Adviser();
+
+                        newAdviser.setLastName(line);
+                        newAdviser.setFirstName(reader.readLine());
+                        newAdviser.setMiddleName(reader.readLine());
+                        newAdviser.setGender(reader.readLine());
+                        newAdviser.setBirthdate(reader.readLine());
+                        newAdviser.setContactNumber(Long.parseLong(reader.readLine()));
+                        newAdviser.setHighestDegreeEarned(reader.readLine());
+
+                        adviser = newAdviser;
+                    }
 
                 } else if (line.equals("STUDENT")) {
 
                     Student student = new Student();
+
                     student.setLRN(Long.parseLong(reader.readLine()));
                     student.setLastName(reader.readLine());
                     student.setFirstName(reader.readLine());
@@ -204,11 +299,22 @@ public class ClassSection {
                 }
             }
 
+            reader.close();
             sortStudents();
-            System.out.println(">> Existing section directory loaded successfully!");
 
-        } catch (IOException e) {
-            System.out.println(">> Error loading file: " + e.getMessage());
+            return true;
+
+        } catch (Exception e) {
+            System.out.println(">> Error loading file.");
+            return false;
         }
+    }
+
+    // Creates the filename for this section
+    private String getFileName() {
+        String name = gradeLevel + "_" + sectionName;
+        name = name.replaceAll("[^a-zA-Z0-9_-]", "_");
+
+        return name + ".txt";
     }
 }
