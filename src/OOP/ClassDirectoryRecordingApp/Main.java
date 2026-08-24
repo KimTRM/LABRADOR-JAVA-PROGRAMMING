@@ -11,9 +11,6 @@ public class Main {
 
     private static ClassSection currentSection;
 
-
-    // ================ MAIN =================
-
     static void main(String[] args) {
 
         loadAvailableSections();
@@ -72,8 +69,7 @@ public class Main {
     }
 
 
-    // ================ CREATE SECTION =================
-
+    // ================ CREATE SECTION ================
     private static void createSection() {
 
         IO.println("--- CREATE NEW CLASS SECTION ---");
@@ -104,9 +100,7 @@ public class Main {
         IO.println(">> File created in ClassDirectories folder.");
     }
 
-
     // ================ SELECT SECTION =================
-
     private static void selectSection() {
 
         if (sections.isEmpty()) {
@@ -128,9 +122,7 @@ public class Main {
         IO.println(">> Class section selected successfully.");
     }
 
-
     // ================ VIEW SECTION =================
-
     private static void viewSection() {
 
         if (checkSection()) {
@@ -140,9 +132,7 @@ public class Main {
         currentSection.displayDirectory();
     }
 
-
     // ================ ADVISER =================
-
     private static void assignAdviser() {
 
         if (checkSection()) {
@@ -166,9 +156,7 @@ public class Main {
         IO.println(">> Adviser information updated successfully!");
     }
 
-
     // ================ ADD STUDENT =================
-
     private static void addStudent() {
 
         if (checkSection()) {
@@ -214,9 +202,7 @@ public class Main {
         IO.println(">> Student added successfully!");
     }
 
-
     // ================ UPDATE STUDENT =================
-
     private static void updateStudent() {
 
         if (checkSection()) {
@@ -276,9 +262,7 @@ public class Main {
         IO.println(">> Student updated successfully!");
     }
 
-
     // ================ SAVE =================
-
     private static void saveSection() {
 
         if (checkSection()) {
@@ -294,7 +278,6 @@ public class Main {
 
 
     // ================ LOAD =================
-
     private static void loadSection() {
 
         if (sections.isEmpty()) {
@@ -321,35 +304,7 @@ public class Main {
         }
     }
 
-
-    // ================ LIST SECTIONS =================
-
-    private static void listSections() {
-
-        if (sections.isEmpty()) {
-            IO.println(">> No class sections found.");
-            return;
-        }
-
-        IO.println("--- AVAILABLE CLASS SECTIONS ---");
-
-        for (int i = 0; i < sections.size(); i++) {
-
-            ClassSection section = sections.get(i);
-
-            IO.println("[" + (i + 1) + "] "
-                    + section.getGradeLevel() + " - "
-                    + section.getSectionName());
-        }
-    }
-
-
-    // ================ LOAD EXISTING FILES =================
-
-    /*
-     * Loads all existing section files when the program starts.
-     * If the folder does not exist, it will be created.
-     */
+    // Loads existing class section files from the ClassDirectories folder
     private static void loadAvailableSections() {
 
         File folder = new File("ClassDirectories");
@@ -386,6 +341,26 @@ public class Main {
             if (section.loadFromFile()) {
                 sections.add(section);
             }
+        }
+    }
+
+    // ================ LIST SECTIONS =================
+    private static void listSections() {
+
+        if (sections.isEmpty()) {
+            IO.println(">> No class sections found.");
+            return;
+        }
+
+        IO.println("--- AVAILABLE CLASS SECTIONS ---");
+
+        for (int i = 0; i < sections.size(); i++) {
+
+            ClassSection section = sections.get(i);
+
+            IO.println("[" + (i + 1) + "] "
+                    + section.getGradeLevel() + " - "
+                    + section.getSectionName());
         }
     }
 

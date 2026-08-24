@@ -59,15 +59,14 @@ public class ClassSection {
     // ================ STUDENT METHODS =================
 
     // Adds a student to this class section
-    public boolean addStudent(Student student) {
+    public void addStudent(Student student) {
         if (findStudent(student.getLRN()) != null) {
-            return false;
+            return;
         }
 
         students.add(student);
         sortStudents();
 
-        return true;
     }
 
     // Searches for a student using LRN
@@ -82,11 +81,11 @@ public class ClassSection {
     }
 
     // Updates an existing student
-    public boolean updateStudent(long LRN, Student newStudent) {
+    public void updateStudent(long LRN, Student newStudent) {
         Student student = findStudent(LRN);
 
         if (student == null) {
-            return false;
+            return;
         }
 
         student.setLRN(newStudent.getLRN());
@@ -100,7 +99,6 @@ public class ClassSection {
 
         sortStudents();
 
-        return true;
     }
 
 
